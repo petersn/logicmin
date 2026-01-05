@@ -1,0 +1,30 @@
+# Yosys synthesis script for generic standard cells
+
+# Read the design
+read_verilog test.v
+
+# Elaborate the design (select top module)
+hierarchy -check -top circuit
+
+# High-level synthesis
+proc
+opt
+fsm
+opt
+memory
+opt
+
+# Technology mapping to generic cells
+techmap
+opt
+
+# Map to standard cells using ABC with generic gates
+abc -g AND,NAND,OR,NOR,XOR,XNOR,ANDNOT,ORNOT
+opt_clean
+
+# Write outputs
+write_verilog -noattr synth_generic.v
+stat
+
+# Optional: write dot file for visualization
+# show -format dot -prefix circuit_synth
