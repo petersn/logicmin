@@ -304,7 +304,7 @@ pub fn cardinality_constraint(
   let mut get_var = |instance: &mut SatInstance, i: usize, k: usize| -> SatLiteral {
     *at_most_k.entry((i, k)).or_insert_with(|| instance.fresh())
   };
-  let get_weight = |i: usize| weights.map(|w| w[i]).unwrap_or(1);
+  // let get_weight = |i: usize| weights.map(|w| w[i]).unwrap_or(1);
   for prefix_len in 1..=vars.len() {
     for count in 1..=prefix_len.min(max_count + 1) {
       let here = get_var(instance, prefix_len, count);
@@ -337,7 +337,7 @@ pub fn cardinality_constraint(
   instance.add_clause(clause);
 }
 
-fn force_unequal(instance: &mut SatInstance, a: &[SatLiteral], b: &[SatLiteral]) {
+pub fn force_unequal(instance: &mut SatInstance, a: &[SatLiteral], b: &[SatLiteral]) {
   assert!(a.len() == b.len());
   let unequal = instance.n_fresh(a.len());
   for i in 0..a.len() {

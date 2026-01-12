@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{CliArgs, sat::{Address, MuxStyle, SatInstance, SatLiteral}, synth::{ConfigVars, Program, ProgramSynthesis}};
+use crate::{CliArgs, sat::{Address, SatInstance, SatLiteral}, synth::{ConfigVars, Program, ProgramSynthesis}};
 
 pub const ALLOW_CONSTANT_INPUTS: bool = false;
 
@@ -46,10 +46,6 @@ impl NandProgram {
         return format!("\x1b[93mx{}\x1b[0m", index);
       }
       format!("\x1b[92mt{}\x1b[0m", index - self.input_count)
-    };
-    let format_lut = |lut: &[bool; 8]| {
-      let value = lut.iter().enumerate().map(|(i, &b)| if b { 1 << i } else { 0 }).sum::<usize>();
-      format!("0x{:02x}", value)
     };
     // s.push_str(&format!("x0, ... x{} = input bits\n", self.input_count - 1));
     s.push_str("def f(");

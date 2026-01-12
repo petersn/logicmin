@@ -236,7 +236,7 @@ impl<const N: usize, const TWO_TO_N: usize> ProgramSynthesis for LutProgram<N, T
 
   fn build_fpga(
     instance: &mut SatInstance,
-    resources: &CliArgs,
+    _resources: &CliArgs,
     configuration_vars: &ConfigVars<Self::ConfigVarsData>,
     input_vars: &[SatLiteral],
     output_vars: &[SatLiteral],
