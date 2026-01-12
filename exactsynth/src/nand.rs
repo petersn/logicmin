@@ -127,6 +127,14 @@ impl ProgramSynthesis for NandProgram {
     } else {
       (0..resources_spec.output_count()).map(|_| Address::make(resources_spec.mux_style, instance, wire_count)).collect()
     };
+    for constr in &resources_spec.constraints() {
+      let addr_to_constrain = if constr.which_gate == gates.len() {
+        &final_selection[constr.which_input]
+      } else {
+        &gates[constr.which_gate].input_indices[constr.which_input]
+      };
+      addr_to_constrain.constrain_address(instance, constr.where_to_wire);
+    }
     ConfigVars {
       config_vars_data: NandConfigVars {
         gates,

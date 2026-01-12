@@ -52,6 +52,9 @@ impl ProgramSynthesis for SumOfProducts {
     let config_vars_data = instance.n_fresh(3_usize.pow(resources_spec.input_count as u32));
     // Apply the cardinality constraint.
     cardinality_constraint(instance, &config_vars_data, None, resources_spec.gate_count);
+    if !resources_spec.constraints().is_empty() {
+      panic!("Constraints aren't valid on SumOfProducts programs!");
+    }
     ConfigVars {
       config_vars_data,
       input_count: resources_spec.input_count,

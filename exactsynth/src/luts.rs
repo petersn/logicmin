@@ -99,28 +99,6 @@ impl<const N: usize, const TWO_TO_N: usize> ProgramSynthesis for LutProgram<N, T
     }
     let final_selection = (0..resources.output_count())
       .map(|_| Address::make(resources.mux_style, instance, wire_count)).collect::<Vec<_>>();
-    // if resources.break_symmetry_15 {
-    //   // We make the first five gates apply to triplets of input bits.
-    //   for gate in 0..5 {
-    //     for i in 0..3 {
-    //       let x = gate * 3 + i;
-    //       for (j, &lit) in gates[gate].input_indices[i].iter().enumerate() {
-    //         if (x >> j) & 1 == 1 {
-    //           instance.add_clause(vec![lit]);
-    //         } else {
-    //           instance.add_clause(vec![-lit]);
-    //         }
-    //       }
-    //     }
-    //   }
-    //   // Force the first five gates to have the same LUT.
-    //   for gate in 1..5 {
-    //     for i in 0..8 {
-    //       instance.add_clause(vec![gates[0].lut[i], -gates[gate].lut[i]]);
-    //       instance.add_clause(vec![-gates[0].lut[i], gates[gate].lut[i]]);
-    //     }
-    //   }
-    // }
     for constr in &resources.constraints() {
       let addr_to_constrain = if constr.which_gate == gates.len() {
         &final_selection[constr.which_input]
@@ -128,13 +106,6 @@ impl<const N: usize, const TWO_TO_N: usize> ProgramSynthesis for LutProgram<N, T
         &gates[constr.which_gate].input_indices[constr.which_input]
       };
       addr_to_constrain.constrain_address(instance, constr.where_to_wire);
-      // for (i, lit) in input_vars.iter().enumerate() {
-      //   if (constr.where_to_wire >> i) & 1 == 1 {
-      //     instance.add_clause(vec![*lit]);
-      //   } else {
-      //     instance.add_clause(vec![-*lit]);
-      //   }
-      // }
     }
     ConfigVars {
       config_vars_data: LutsConfigVars {
