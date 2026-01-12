@@ -29,7 +29,41 @@ pub fn truth_table_to_naive_sum_of_products(
 #[derive(Debug, Clone)]
 pub struct SumOfProducts(pub Vec<Vec<i32>>);
 
-impl Program for SumOfProducts {}
+impl Program for SumOfProducts {
+  fn pretty_print(&self) -> String {
+    let input_count = self.count_inputs();
+    let mut s = String::new();
+    s.push_str("def f(");
+    for i in 0..input_count {
+      if i != 0 {
+        s.push_str(", ");
+      }
+      s.push_str(&format!("\x1b[93mx{}\x1b[0m", i));
+    }
+    s.push_str("):\n");
+    s.push_str("    return (\n");
+    for (i, term) in self.0.iter().enumerate() {
+      s.push_str("        (");
+      for (j, var) in term.iter().enumerate() {
+        if j != 0 {
+          s.push_str(" and ");
+        }
+        if *var < 0 {
+          s.push_str(&format!("(not \x1b[93mx{}\x1b[0m)", -var));
+        } else {
+          s.push_str(&format!("\x1b[93mx{}\x1b[0m", var));
+        }
+      }
+      s.push(')');
+      if i != self.0.len() - 1 {
+        s.push_str(" or");
+      }
+      s.push('\n');
+    }
+    s.push_str("    )");
+    s
+  }
+}
 
 impl SumOfProducts {
   fn count_inputs(&self) -> usize {
