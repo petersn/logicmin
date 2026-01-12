@@ -362,6 +362,7 @@ pub fn bits_for_address(style: MuxStyle, options: usize) -> usize {
   }
 }
 
+#[derive(Debug)]
 pub struct Address {
   pub style: MuxStyle,
   pub options: usize,

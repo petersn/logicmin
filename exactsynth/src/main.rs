@@ -6,12 +6,19 @@ pub mod synth;
 pub mod sat;
 
 use clap::Parser;
+use luts::LutProgram;
 use nand::NandProgram;
 use num_bigint::BigUint;
-use luts::{ExtraConstraint, VpternlogProgram};
 use sat::{MuxStyle, SatSolver};
 use sum_of_products::SumOfProducts;
-use synth::{Program, ProgramSynthesis, lookup_table_search};
+use synth::{Program, lookup_table_search};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct ExtraConstraint {
+  pub which_gate: usize,
+  pub which_input: usize,
+  pub where_to_wire: usize,
+}
 
 #[derive(clap::ValueEnum, Clone, Debug)]
 pub enum ProgramKind {
@@ -96,12 +103,12 @@ fn main() {
   };
 
   let p: Option<Box<dyn Program>> = match cli_args.kind {
-    ProgramKind::BinaryGates => match lookup_table_search::<VpternlogProgram>(
+    ProgramKind::BinaryGates => match lookup_table_search::<LutProgram<2, 4>>(
       solver, f, &cli_args, log,
     ) {
       None => None, Some(x) => Some(Box::new(x)),
     }
-    ProgramKind::TernaryGates => match lookup_table_search::<VpternlogProgram>(
+    ProgramKind::TernaryGates => match lookup_table_search::<LutProgram<3, 8>>(
       solver, f, &cli_args, log,
     ) {
       None => None, Some(x) => Some(Box::new(x)),
