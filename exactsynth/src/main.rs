@@ -24,6 +24,7 @@ pub struct ExtraConstraint {
 pub enum ProgramKind {
   BinaryGates,
   TernaryGates,
+  QuaternaryGates,
   NandGates,
   SumOfProducts,
 }
@@ -109,6 +110,11 @@ fn main() {
       None => None, Some(x) => Some(Box::new(x)),
     }
     ProgramKind::TernaryGates => match lookup_table_search::<LutProgram<3, 8>>(
+      solver, f, &cli_args, log,
+    ) {
+      None => None, Some(x) => Some(Box::new(x)),
+    }
+    ProgramKind::QuaternaryGates => match lookup_table_search::<LutProgram<4, 16>>(
       solver, f, &cli_args, log,
     ) {
       None => None, Some(x) => Some(Box::new(x)),
