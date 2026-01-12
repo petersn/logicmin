@@ -1,0 +1,28 @@
+[package]
+name = "exactsynth"
+version = "0.1.0"
+edition = "2024"
+
+#[lib]
+#crate-type = ["cdylib", "rlib"]
+
+[profile.dev.package.autosat]
+opt-level = 3
+
+[build-dependencies]
+autosat = "0.1.0"
+serde = { version = "1.0.155", features = [ "derive" ] }
+serde_json = { version = "1.0.94", features = [ "preserve_order" ] }
+
+[dependencies]
+varisat = "0.2.2"
+splr = { version = "0.17.0", features = [ "incremental_solver" ] }
+serde = { version = "1.0.155", features = [ "derive" ] }
+serde_json = { version = "1.0.94", features = [ "preserve_order" ] }
+tempfile = "3.10.0"
+rand = "0.8.5"
+clap = { version = "4.5.1", features = ["derive"] }
+indicatif = "0.18.0"
+rayon = "1.11.0"
+num-bigint = "0.4.6"
+
